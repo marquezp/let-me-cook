@@ -16,6 +16,6 @@ npm run dev
 cd backend
 python -m venv venv
 venv\Scripts\Activate.ps1
-pip install flask flask_cors Scrapy
+pip install flask flask-cors Scrapy
 flask --app app --debug run
 ```
