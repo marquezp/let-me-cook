@@ -2,12 +2,13 @@ import { useState } from "react";
 import axios from "axios";
 
 function Search() {
-  const [quotes, setQuotes] = useState([]); // State to hold quotes
+  const [books, setBooks] = useState([]); // State to hold books
 
   const handleScrape = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:5000/scrape");
-      setQuotes(response.data);
+      console.log("response.data:", response.data);
+      setBooks(response.data.data);
     } catch (error) {
       console.error("Error scraping data:", error);
     }
@@ -22,9 +23,12 @@ function Search() {
         Scrape
       </button>
       <ul>
-        {quotes.map((quote, index) => (
+        {books.map((book, index) => (
           <li key={index} className="border-b border-gray-300 p-2">
-            {quote.text}
+            <h2 className="text-md font-bold">
+              {book.title} - {book.price}
+            </h2>
+            <p>{book.description}</p>
           </li>
         ))}
       </ul>

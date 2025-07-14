@@ -1,9 +1,8 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-from scrapy.crawler import CrawlerProcess
-from scraper.spiders.quotes_spider import QuotesSpider
 import os
 import json
+import subprocess
 
 app = Flask(__name__)
 CORS(app)
@@ -18,18 +17,12 @@ def scrape():
     # Clean up previous output file if it exists
     if os.path.exists(output_file):
         os.remove(output_file)
-        
-    process = CrawlerProcess(settings={
-        'FEEDS': {
-            output_file: {'format': 'json'},
-        },
-        'LOG_ENABLED': False,
-    })
-    
-    process.crawl(QuotesSpider)
-    process.start()
-    
-    # Read the output file
-    with open(output_file) as f:
-        data = json.load(f)
-    return jsonify(data)
+
+    result = subprocess.run(['scrapy', 'crawl', 'bookspider', '-o', 'output.json'], capture_output=True, text=True)
+
+    if result.returncode == 0:
+        with open(output_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        return jsonify({"status": "success", "data": data})
+    else:
+        return jsonify({"status": "error", "details": result.stderr}), 500
