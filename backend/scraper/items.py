@@ -21,3 +21,9 @@ class BookItem(scrapy.Item):
     category = scrapy.Field()
     description = scrapy.Field()
     price = scrapy.Field()
+
+class RecipeItem(scrapy.Item):
+    url = scrapy.Field()
+    title = scrapy.Field()
+    ingredients = scrapy.Field()
+    instructions = scrapy.Field()

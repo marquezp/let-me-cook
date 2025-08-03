@@ -5,7 +5,7 @@ import json
 import subprocess
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/')
 def hello_world():
@@ -18,7 +18,7 @@ def scrape():
     if os.path.exists(output_file):
         os.remove(output_file)
 
-    result = subprocess.run(['scrapy', 'crawl', 'bookspider', '-o', 'output.json'], capture_output=True, text=True)
+    result = subprocess.run(['scrapy', 'crawl', 'recipespider', '-o', 'output.json'], capture_output=True, text=True)
 
     if result.returncode == 0:
         with open(output_file, 'r', encoding='utf-8') as f:

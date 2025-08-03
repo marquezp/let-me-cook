@@ -2,13 +2,13 @@ import { useState } from "react";
 import axios from "axios";
 
 function Search() {
-  const [books, setBooks] = useState([]); // State to hold books
+  const [recipes, setRecipes] = useState([]); // State to hold recipes
 
   const handleScrape = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:5000/scrape");
       console.log("response.data:", response.data);
-      setBooks(response.data.data);
+      setRecipes(response.data.data);
     } catch (error) {
       console.error("Error scraping data:", error);
     }
@@ -23,12 +23,17 @@ function Search() {
         Scrape
       </button>
       <ul>
-        {books.map((book, index) => (
+        {recipes.map((recipe, index) => (
           <li key={index} className="border-b border-gray-300 p-2">
-            <h2 className="text-md font-bold">
-              {book.title} - {book.price}
-            </h2>
-            <p>{book.description}</p>
+            <h2 className="text-md font-bold">{recipe.title}</h2>
+            <a href={recipe.url} target="_blank" rel="noopener noreferrer">
+              {recipe.url}
+            </a>
+            <ul>
+              {recipe.ingredients.map((ingredient, index) => (
+                <li key={index}>{ingredient}</li>
+              ))}
+            </ul>
           </li>
         ))}
       </ul>
